@@ -45,6 +45,8 @@ def menu_de_opciones():
     mensaje += '\n16) Mostrar el jugador con la mayor cantidad de logros.'
     mensaje += '\n17) Mostrar los jugadores con un porcentaje de tiros triples mayor a X valor.'
     mensaje += '\n18) Mostrar el jugador con mayor cantidad de temporadas jugadas.'
+    mensaje += '\n19) TODAVÍA NO'
+    mensaje += '\n20) Exportar posiciones de los jugadores sobre todas las estadísticas.'
     mensaje += '\n0) Cerrar el programa.\n'
     
     print(mensaje)
@@ -519,4 +521,101 @@ def mostrar_jugador_con_mas_logros(lista:list):
     print('El jugador con mayor cantidad de logros es {0}, con un total de {1}.'
           .format(nombre_mayor,cantidad_mayor))
 
+    mensaje_opcion_finalizada()
+
+# PUNTO 23
+def conseguir_lista_de_jugadores_filtrada(lista:list):
+    lista_de_nombres_filtrada = []
+    
+    for indice in lista:
+        lista_de_nombres_filtrada.append(indice['nombre'])
+    
+    return lista_de_nombres_filtrada
+
+def asignar_posicion_a_los_jugadores_segun_un_dato(lista:list,dato:str) -> list:
+        
+    # Lista de nombres en orden original
+    lista_de_jugadores_original = conseguir_lista_de_jugadores_filtrada(lista)
+    
+    # Lista en la que se agregarán los datos en orden original
+    lista_de_valores_original = []
+    
+    # Lista de nombres ordenados de mejor a peor según un dato
+    lista_de_jugadores_ordenada = []
+    
+    # Lista de las posiciones según un dato en el orden original
+    lista_de_posiciones = []    
+    
+    for indice in lista:
+        # Se agrega el valor del dato a una lista y el nombre del jugador a otra
+        lista_de_valores_original.append(indice['estadisticas'][dato])
+    
+    # Se ordena la lista_de_valores_original de mejor a peor
+    lista_de_valores_ordenada = quicksort(lista_de_valores_original,False)
+    
+    # Se iteran dos listas, una dentro de otra, para después compararlos y
+    # crear una lista de nombres ordenada. Es importante que lista_de_valores_ordenada
+    # sea la primera en iterarse ya que así los elementos se comparan en
+    # el orden correcto.    
+    for indice_lista_ordenada in lista_de_valores_ordenada:
+        for indice_lista_original in lista:
+            # Compara los valores. Si son iguales, los agrega a lista_de_jugadores_ordenada.
+            if indice_lista_ordenada == indice_lista_original['estadisticas'][dato]:
+                lista_de_jugadores_ordenada.append(indice_lista_original['nombre'])
+
+    # De forma similar a antes, se iteran dos listas, una dentro de otra.
+    # Esta vez se busca averiguar la posición del jugador en el orden que
+    # aparecen en la lista original.
+    for indice_primero in lista_de_jugadores_original:
+        for indice_segundo in lista_de_jugadores_ordenada:
+            # Compara los valores. Si son iguales, se añade un elemento a la
+            # lista según el indice en el que se encuentran y le suma 1, porque
+            # las listas empiezan en el indice 0 y esa no es una posición válida.
+            if indice_primero == indice_segundo:
+                valor_a_agregar = lista_de_jugadores_ordenada.index(indice_segundo) + 1
+                lista_de_posiciones.append(valor_a_agregar)
+    
+    return lista_de_posiciones
+    
+def exportar_posiciones_de_todas_las_estadisticas(lista:list):
+
+    # Se consiguen las posiciones de todas las estadísticas pedidas
+    lista_posiciones_puntos = asignar_posicion_a_los_jugadores_segun_un_dato(lista,'puntos_totales')
+    lista_posiciones_rebotes = asignar_posicion_a_los_jugadores_segun_un_dato(lista,'rebotes_totales')
+    lista_posiciones_asistencias = asignar_posicion_a_los_jugadores_segun_un_dato(lista,'asistencias_totales')
+    lista_posiciones_robos = asignar_posicion_a_los_jugadores_segun_un_dato(lista,'robos_totales')
+    
+    # También se vuelve a traer la lista de jugadores original
+    lista_de_jugadores_original = conseguir_lista_de_jugadores_filtrada(lista)
+    
+    # Se inicializa un contador en 0
+    contador = 0
+    
+    # Se crea la primera fila del futuro texto a exportar a .csv
+    texto_csv = 'Jugadores,Puntos,Rebotes,Asistencias,Robos\n'
+    
+    # Se crea un while de 12 pasadas porque hay 12 jugadores
+    while contador < len(lista_de_jugadores_original):
+        # Se asignan los valores de los indices a las variables para mayor claridad
+        indice_jugadores = lista_de_jugadores_original[contador]
+        indice_puntos = lista_posiciones_puntos[contador]
+        indice_rebotes = lista_posiciones_rebotes[contador]
+        indice_asistencias = lista_posiciones_asistencias[contador]
+        indice_robos = lista_posiciones_robos[contador]
+        
+        # Se concatenan todos los datos
+        texto_csv += ('{0},{1},{2},{3},{4}\n'.
+              format(indice_jugadores,indice_puntos,indice_rebotes,indice_asistencias,indice_robos))
+        
+        # Se suma 1 al contador
+        contador += 1
+
+    # Se asigna la ruta de exportación
+    ruta_export = 'exports/posiciones.csv'
+    
+    # Crea o sobrescribe el archivo .csv y exporta los datos
+    with open(ruta_export, 'w+') as file:
+        file.write(texto_csv)
+    
+    print('Los datos fueron exportados con éxito.')
     mensaje_opcion_finalizada()

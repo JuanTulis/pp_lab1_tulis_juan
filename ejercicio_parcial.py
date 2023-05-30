@@ -14,7 +14,7 @@ while True:
     # Se valida el valor ingresado
     if validar_valor_numerico(opcion) == True:
         opcion_casteada = int(opcion)
-        if opcion_casteada > -1 and opcion_casteada < 19:
+        if opcion_casteada > -1 and opcion_casteada < 21:
             mensaje_valor_ingresado_valido(opcion)
             if opcion_casteada == 1:
                 mostrar_nombre_y_posicion(lista_datos_dream_team)
@@ -52,6 +52,9 @@ while True:
                 mostrar_jugadores_con_estadistica_sobre_valor_ingresado(lista_datos_dream_team,'porcentaje_tiros_triples')
             elif opcion_casteada == 18:
                 mostrar_el_jugador_con_mayor_estadistica(lista_datos_dream_team,'temporadas')
+            elif opcion_casteada == 20:
+                exportar_posiciones_de_todas_las_estadisticas(lista_datos_dream_team)
+            
             elif opcion_casteada == 0:
                 input('Ha decidido cerrar el programa. Nos vemos otro día.')
                 # El break hace que se deje de ejecutar el código
