@@ -498,13 +498,13 @@ def mostrar_promedio_puntos_por_partido_salvo_por_el_menor_valor(lista:list):
     mensaje_opcion_finalizada()
 
 # PUNTO 17
-def mostrar_jugador_con_mas_logros(lista:list):
+def mostrar_jugador_con_mas_logros(lista:list) -> list:
     """
     \nQué hace:
     - Muestra al jugador con la mayor cantidad de logros.
     \nParámetros:
     - lista (list): la lista a analizar.
-    """    
+    """
     # Se crea una flag para la primera vuelta del for
     flag_primera_vuelta = True
     
@@ -523,8 +523,16 @@ def mostrar_jugador_con_mas_logros(lista:list):
 
     mensaje_opcion_finalizada()
 
-# PUNTO 23
+# PUNTO 23 (las tres funciones)
 def conseguir_lista_de_jugadores_filtrada(lista:list):
+    """
+    \nQué hace:
+    - Filtra la lista total y deja solo los nombres de los jugadores
+    \nParámetros:
+    - lista (list): la lista a analizar.
+    \nDevuelve:
+    - list: la lista filtrada
+    """
     lista_de_nombres_filtrada = []
     
     for indice in lista:
@@ -533,7 +541,16 @@ def conseguir_lista_de_jugadores_filtrada(lista:list):
     return lista_de_nombres_filtrada
 
 def asignar_posicion_a_los_jugadores_segun_un_dato(lista:list,dato:str) -> list:
-        
+    """
+    \nQué hace:
+    - Asigna las posiciones de una estadística en el orden que aparecen los
+    jugadores en el archivo dt.json
+    \nParámetros:
+    - lista (list): la lista a analizar.
+    - dato (str): la estadística a analizar.
+    \nDevuelve:
+    - list: la lista de las posiciones.
+    """
     # Lista de nombres en orden original
     lista_de_jugadores_original = conseguir_lista_de_jugadores_filtrada(lista)
     
@@ -578,7 +595,13 @@ def asignar_posicion_a_los_jugadores_segun_un_dato(lista:list,dato:str) -> list:
     return lista_de_posiciones
     
 def exportar_posiciones_de_todas_las_estadisticas(lista:list):
-
+    """
+    \nQué hace:
+    - Toma la lista de nombres original y las posiciones de los jugadores para
+    exportar todos los datos a un archivo .csv
+    \nParámetros:
+    - lista (list): la lista a analizar.
+    """
     # Se consiguen las posiciones de todas las estadísticas pedidas
     lista_posiciones_puntos = asignar_posicion_a_los_jugadores_segun_un_dato(lista,'puntos_totales')
     lista_posiciones_rebotes = asignar_posicion_a_los_jugadores_segun_un_dato(lista,'rebotes_totales')
