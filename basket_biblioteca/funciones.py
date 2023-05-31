@@ -45,7 +45,7 @@ def menu_de_opciones():
     mensaje += '\n16) Mostrar el jugador con la mayor cantidad de logros.'
     mensaje += '\n17) Mostrar los jugadores con un porcentaje de tiros triples mayor a X valor.'
     mensaje += '\n18) Mostrar el jugador con mayor cantidad de temporadas jugadas.'
-    mensaje += '\n19) TODAVÍA NO'
+    mensaje += '\n19) NO ESTÁ TERMINADO'
     mensaje += '\n20) Exportar posiciones de los jugadores sobre todas las estadísticas.'
     mensaje += '\n0) Cerrar el programa.\n'
     
@@ -417,8 +417,8 @@ def mostrar_el_jugador_con_mayor_estadistica(lista:list,dato:str):
 
     mensaje_opcion_finalizada()
 
-# PUNTOS 10, 11, 12, 15, 18
-def mostrar_jugadores_con_estadistica_sobre_valor_ingresado(lista:list,dato:str):
+# PUNTOS 10, 11, 12, 15, 18, técnicamente también el 20 pero no está terminada esa parte
+def mostrar_jugadores_con_estadistica_sobre_valor_ingresado(lista:list,dato:str,flag_posiciones:bool):
     """
     \nQué hace:
     - Muestra a todos los jugadores que tengan un valor superior al valor
@@ -427,8 +427,10 @@ def mostrar_jugadores_con_estadistica_sobre_valor_ingresado(lista:list,dato:str)
     - lista (list):
     - dato (str): el dato a buscar. DEBE SER UNO DE LOS SIGUIENTES:
     "promedio_puntos_por_partido", "promedio_rebotes_por_partido",
-    "promedio_asistencias_por_partido","porcentaje_tiros_libres",
-    o "porcentaje_tiros_triples".
+    "promedio_asistencias_por_partido", "porcentaje_tiros_de_campo",
+    "porcentaje_tiros_libres", o "porcentaje_tiros_triples".
+    - flag_posiciones (bool): True para incluir el cálculo de posiciones
+    en la cancha.
     """
     valor = input('Ingrese el valor a usar: ')
     mensaje_valor_ingresado_valido(valor)
@@ -437,6 +439,10 @@ def mostrar_jugadores_con_estadistica_sobre_valor_ingresado(lista:list,dato:str)
     lista_jugadores_superiores = []
     dict_nombres = {}
     
+    # Se crea la lista de las posiciones si la flag es true
+    if flag_posiciones == True:
+        lista_posiciones_superiores = []
+    
     # Se valida el valor ingresado
     if validar_valor_numerico(valor) == True:
         valor = float(valor)
@@ -444,19 +450,35 @@ def mostrar_jugadores_con_estadistica_sobre_valor_ingresado(lista:list,dato:str)
         # Se obtiene el dato a buscar sin guiones bajos
         dato_reescrito = quitar_guiones_del_nombre(dato)
         
-        # Se agregan los nombres a la lista y los valores al diccionario
+        # Se agregan los nombres y/o posiciones a las listas y los valores al diccionario
         for indice in lista:
             if indice['estadisticas'][dato] > valor:
                 lista_jugadores_superiores.append(indice['nombre'])
                 dict_nombres[indice['nombre']] = indice['estadisticas'][dato]
+                if flag_posiciones == True:
+                    lista_posiciones_superiores.append(indice['posicion'])
         
         # Si hay resultados, se mostrará este mensaje
         if len(lista_jugadores_superiores) > 0:
             mensaje = 'Los jugador(es) con un {0} mayor a {1} son:'.format(dato_reescrito,valor)
             
-            for indice in lista_jugadores_superiores:
-                mensaje += '\n- {0} ({1})'.format(indice,dict_nombres[indice])
-        
+            # Se inicia un contador en 0
+            contador = 0
+            
+            # Si la flag es true, el mensaje incluye las posiciones
+            while contador < len(lista_jugadores_superiores):
+                if flag_posiciones == True:
+                    mensaje += '\n- {0} ({1}) - {2}'.format(
+                        lista_jugadores_superiores[contador],
+                        dict_nombres[lista_jugadores_superiores[contador]],
+                        lista_posiciones_superiores[contador])
+                    contador += 1
+                else:
+                    mensaje += '\n- {0} ({1})'.format(
+                        lista_jugadores_superiores[contador],
+                        dict_nombres[lista_jugadores_superiores[contador]])
+                    contador += 1
+                    
         # De lo contrario, se mostrará este otro
         else:
             mensaje = 'Nadie tiene un {0} mayor a {1}.'.format(dato_reescrito,valor)
@@ -523,7 +545,7 @@ def mostrar_jugador_con_mas_logros(lista:list) -> list:
 
     mensaje_opcion_finalizada()
 
-# PUNTO 23 (las tres funciones)
+# PUNTO 23
 def conseguir_lista_de_jugadores_filtrada(lista:list):
     """
     \nQué hace:
@@ -642,3 +664,29 @@ def exportar_posiciones_de_todas_las_estadisticas(lista:list):
     
     print('Los datos fueron exportados con éxito.')
     mensaje_opcion_finalizada()
+
+# PUNTO EXTRA 1
+def mostrar_cantidad_de_jugadores_por_posicion(lista:list):
+    
+    dict_posiciones = {}
+    
+    for indice in lista:
+        if indice['posicion'] in dict_posiciones:
+            dict_posiciones[indice['posicion']] += 1
+        else:
+            dict_posiciones[indice['posicion']] = 1
+
+    lista_keys_posiciones = list(dict_posiciones)
+    
+    mensaje = 'Cantidad de jugadores por posición:'
+    for indice in lista_keys_posiciones:
+        mensaje += '\n{0}: {1}.'.format(indice,dict_posiciones[indice])
+    
+    print(mensaje)
+    
+    mensaje_opcion_finalizada()
+
+
+
+
+
