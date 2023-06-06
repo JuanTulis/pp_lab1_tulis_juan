@@ -14,7 +14,7 @@ while True:
     # Se valida el valor ingresado
     if validar_valor_numerico(opcion) == True:
         opcion_casteada = int(opcion)
-        if opcion_casteada > -1 and opcion_casteada < 28:
+        if opcion_casteada > -1 and opcion_casteada < 25:
             mensaje_valor_ingresado_valido(opcion)
             if opcion_casteada == 1:
                 mostrar_nombre_y_posicion(lista_datos_dream_team)
@@ -58,6 +58,12 @@ while True:
                 exportar_posiciones_de_todas_las_estadisticas(lista_datos_dream_team)
             elif opcion_casteada == 21:
                 mostrar_cantidad_de_jugadores_por_posicion(lista_datos_dream_team)
+            elif opcion_casteada == 22:
+                mostrar_cantidad_de_all_stars(lista_datos_dream_team)
+            elif opcion_casteada == 23:
+                mostrar_mejor_jugador_en_todas_las_estadisticas(lista_datos_dream_team)
+            elif opcion_casteada == 24:
+                mostrar_el_mejor_jugador_global(lista_datos_dream_team)
             elif opcion_casteada == 0:
                 input('Ha decidido cerrar el programa. Nos vemos otro día.')
                 # El break hace que se deje de ejecutar el código

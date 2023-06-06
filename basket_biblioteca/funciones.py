@@ -45,8 +45,12 @@ def menu_de_opciones():
     mensaje += '\n16) Mostrar el jugador con la mayor cantidad de logros.'
     mensaje += '\n17) Mostrar los jugadores con un porcentaje de tiros triples mayor a X valor.'
     mensaje += '\n18) Mostrar el jugador con mayor cantidad de temporadas jugadas.'
-    mensaje += '\n19) NO ESTÁ TERMINADO'
-    mensaje += '\n20) Exportar posiciones de los jugadores sobre todas las estadísticas.'
+    mensaje += '\n19) Mostrar los jugadores con un porcentaje de tiros de campo mayor a X valor.'
+    mensaje += '\n20) BONUS: Exportar posiciones de los jugadores sobre todas las estadísticas.'
+    mensaje += '\n21) EXTRA 1: Mostrar la cantidad de jugadores por posición en la cancha.'
+    mensaje += '\n22) EXTRA 2: Mostrar la cantidad de All-Stars'
+    mensaje += '\n23) EXTRA 3: Mostrar el mejor jugador de todas las estadísticas.'
+    mensaje += '\n24) EXTRA 4: Mostrar el mejor jugador global.'
     mensaje += '\n0) Cerrar el programa.\n'
     
     print(mensaje)
@@ -120,6 +124,22 @@ def quicksort(lista_original:list,flag_orden:bool) -> list:
     lista_final.append(pivot)
     lista_final.extend(quicksort(lista_derecha,flag_orden))
     return lista_final
+
+def conseguir_lista_de_jugadores_filtrada(lista:list):
+    """
+    \nQué hace:
+    - Filtra la lista total y deja solo los nombres de los jugadores
+    \nParámetros:
+    - lista (list): la lista a analizar.
+    \nDevuelve:
+    - list: la lista filtrada
+    """
+    lista_de_nombres_filtrada = []
+    
+    for indice in lista:
+        lista_de_nombres_filtrada.append(indice['nombre'])
+    
+    return lista_de_nombres_filtrada
 
 # Mensajes recurrentes
 def mensaje_valor_ingresado_valido(valor_ingresado:str):
@@ -385,11 +405,11 @@ def mostrar_si_es_del_salon_de_la_fama(lista:list):
 
     mensaje_opcion_finalizada()
 
-# PUNTOS 7, 8, 9, 13, 14, 19
-def mostrar_el_jugador_con_mayor_estadistica(lista:list,dato:str):
+# PUNTOS 7, 8, 9, 13, 14, 19, EXTRA 3, EXTRA 4
+def calcular_el_jugador_con_mayor_estadistica(lista:list,dato:str):
     """
     \nQué hace:
-    - Muestra al jugador que tenga el mayor número de X estadística.
+    - Calcula al jugador que tenga el mayor número de X estadística.
     \nParámetros:
     - lista (list): la lista a analizar.
     - dato (str): el dato a buscar. DEBE SER UNO DE LOS SIGUIENTES:
@@ -411,13 +431,29 @@ def mostrar_el_jugador_con_mayor_estadistica(lista:list,dato:str):
         # Cambia la flag a False
         flag_primera_vuelta = False
     
+    # Devuelve el dato analizado, el nombre del jugador y la cantidad en dicho dato
+    return dato_reescrito, nombre_mayor, dato_mayor
+
+def mostrar_el_jugador_con_mayor_estadistica(lista:list,dato:str):
+    """
+    \nQué hace:
+    - Muestra los resultados de la función calcular_el_jugador_con_mayor_estadistica.
+    \nParámetros:
+    - lista (list): la lista a analizar.
+    - dato (str): el dato a buscar. DEBE SER UNO DE LOS SIGUIENTES:
+    "rebotes_totales", "porcentaje_tiros_de_campo", "asistencias_totales",
+    "robos_totales", "bloqueos_totales", o "temporadas".
+    """
+    # Llama a la función calcular_el_jugador_con_mayor_estadistica
+    dato_returneado, nombre_returneado, cantidad_returneada = calcular_el_jugador_con_mayor_estadistica(lista,dato)
+
     # Muestra todos los datos en pantalla
     print('El jugador con mayor cantidad de {0} es {1}, con un total de {2}.'
-          .format(dato_reescrito,nombre_mayor,dato_mayor))
+          .format(dato_returneado,nombre_returneado,cantidad_returneada))
 
     mensaje_opcion_finalizada()
 
-# PUNTOS 10, 11, 12, 15, 18, técnicamente también el 20 pero no está terminada esa parte
+# PUNTOS 10, 11, 12, 15, 18, 20
 def mostrar_jugadores_con_estadistica_sobre_valor_ingresado(lista:list,dato:str,flag_posiciones:bool):
     """
     \nQué hace:
@@ -546,22 +582,6 @@ def mostrar_jugador_con_mas_logros(lista:list) -> list:
     mensaje_opcion_finalizada()
 
 # PUNTO 23
-def conseguir_lista_de_jugadores_filtrada(lista:list):
-    """
-    \nQué hace:
-    - Filtra la lista total y deja solo los nombres de los jugadores
-    \nParámetros:
-    - lista (list): la lista a analizar.
-    \nDevuelve:
-    - list: la lista filtrada
-    """
-    lista_de_nombres_filtrada = []
-    
-    for indice in lista:
-        lista_de_nombres_filtrada.append(indice['nombre'])
-    
-    return lista_de_nombres_filtrada
-
 def asignar_posicion_a_los_jugadores_segun_un_dato(lista:list,dato:str) -> list:
     """
     \nQué hace:
@@ -667,7 +687,12 @@ def exportar_posiciones_de_todas_las_estadisticas(lista:list):
 
 # PUNTO EXTRA 1
 def mostrar_cantidad_de_jugadores_por_posicion(lista:list):
-    
+    """
+    \nQué hace:
+    - Muestra la cantidad de jugadores por posición en la cancha.
+    \nParámetros:
+    - lista (list): la lista a analizar.
+    """
     dict_posiciones = {}
     
     for indice in lista:
@@ -686,7 +711,112 @@ def mostrar_cantidad_de_jugadores_por_posicion(lista:list):
     
     mensaje_opcion_finalizada()
 
+# PUNTO EXTRA 2
+def mostrar_cantidad_de_all_stars(lista:list):
+    """
+    \nQué hace:
+    - Cuenta y muestra la cantidad de veces que cada jugador fue un All-Star.
+    \nParámetros:
+    - lista (list): la lista a analizar.
+    """
+    # Se crean un diccionario y una lista para almacenar cantidades
+    dict_cantidades = {}
+    cantidades_ordenadas = []
+    mensaje = ''
 
+    for indice_jugador in lista:
+        # Toma el nombre del jugador
+        nombre_jugador = indice_jugador['nombre']
+        # Busca en la lista de logros si se encuentra la palabra "All-Star"
+        for indice_logros in indice_jugador['logros']:
+            if 'All-Star' in indice_logros:
+                # Si lo está, se separa el número del resto de la oración...
+                logro_all_star_dividido = indice_logros.split(' ')
+                # ...se pasa a entero...
+                cantidad_int = int(logro_all_star_dividido[0])
+                # ...se añade el dato y el nombre del jugador al diccionario...
+                dict_cantidades[nombre_jugador] = cantidad_int
+                # ...y se añade el dato a la lista...
+                cantidades_ordenadas.append(cantidad_int)
+    
+    # Crea una lista con los nombres de los jugadores en orden de mayor a menor
+    nombres_ordenados = sorted(dict_cantidades, key=dict_cantidades.get, reverse=True)
+    
+    # También se ordenan las cantidades de mayor a menor
+    cantidades_ordenadas = quicksort(cantidades_ordenadas,False)
 
+    # Se arma el mensaje en base a los índices de las dos listas anteriores
+    for indice in range(len(nombres_ordenados)):
+        mensaje += '\n{0} ({1} veces All-Star)'.format(nombres_ordenados[indice],cantidades_ordenadas[indice])
 
+    # Se imprime el mensaje
+    print(mensaje)
 
+    mensaje_opcion_finalizada()
+
+# PUNTO EXTRA 3
+def mostrar_mejor_jugador_en_todas_las_estadisticas(lista:list):
+    """
+    \nQué hace:
+    - Muestra el mejor jugador en cada estadística usando la función
+    calcular_el_jugador_con_mayor_estadistica
+    \nParámetros:
+    - lista (list): la lista a analizar.
+    """
+    # Se crea una lista de todas las estadísticas a analizar
+    lista_estadisticas = ['temporadas', 'puntos_totales', 'promedio_puntos_por_partido',
+                          'rebotes_totales', 'promedio_rebotes_por_partido',
+                          'asistencias_totales', 'promedio_asistencias_por_partido',
+                          'robos_totales', 'bloqueos_totales', 'porcentaje_tiros_de_campo',
+                          'porcentaje_tiros_libres', 'porcentaje_tiros_triples']
+    
+    for indice in lista_estadisticas:
+        # Llama a la función calcular_el_jugador_con_mayor_estadistica
+        dato_returneado, nombre_returneado, cantidad_returneada = calcular_el_jugador_con_mayor_estadistica(lista,indice)
+
+        # Muestra todos los datos en pantalla
+        print('Mayor cantidad de {0}: {1} ({2}).'
+            .format(dato_returneado,nombre_returneado,cantidad_returneada))
+
+    mensaje_opcion_finalizada()
+
+# PUNTO EXTRA 4
+def mostrar_el_mejor_jugador_global(lista:list):
+    """
+    \nQué hace:
+    - Muestra el jugador con mayor cantidad de "ser el mejor en X estadística",
+    usando la función calcular_el_jugador_con_mayor_estadistica
+    \nParámetros:
+    - lista (list): la lista a analizar.
+    """
+    dict_nombres = {}
+    
+    lista_estadisticas = ['temporadas', 'puntos_totales', 'promedio_puntos_por_partido',
+                          'rebotes_totales', 'promedio_rebotes_por_partido',
+                          'asistencias_totales', 'promedio_asistencias_por_partido',
+                          'robos_totales', 'bloqueos_totales', 'porcentaje_tiros_de_campo',
+                          'porcentaje_tiros_libres', 'porcentaje_tiros_triples']
+    
+    for indice in lista_estadisticas:
+        # Llama a la función calcular_el_jugador_con_mayor_estadistica
+        # Con dato_returneado y cantidad_returneada no se hace nada
+        dato_returneado, nombre_returneado, cantidad_returneada = calcular_el_jugador_con_mayor_estadistica(lista,indice)
+        # Si el nombre no está en el diccionario de nombres, se le asigna un valor inicial
+        if nombre_returneado not in dict_nombres:
+            dict_nombres[nombre_returneado] = 1
+        # Y si ya está, se le suma 1
+        else:
+            dict_nombres[nombre_returneado] += 1
+    
+    # Se pasan los valores del diccionario a listas
+    lista_valores = list(dict_nombres.values())
+    lista_keys = list(dict_nombres.keys())
+    # Se ordena la lista de valores
+    lista_valores = quicksort(lista_valores,False)
+    
+    # Se busca el jugador con mayor cantidad de "Top 1" y se imprime el mensaje
+    for indice in lista_keys:
+        if dict_nombres[indice] == lista_valores[0]:
+            print('El jugador con las mejores estadísticas globales es {0}.'.format(indice))
+    
+    mensaje_opcion_finalizada()
