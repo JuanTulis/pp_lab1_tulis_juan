@@ -4,7 +4,7 @@ from basket_biblioteca import *
 # La ruta del archivo de los datos a utilizar
 ruta_archivo_json = 'dt.json'
 
-# Se crea una lista para utilizarlos más fácilmente
+# Se crea una lista para utilizarlos más fácilmente.
 lista_datos_dream_team = cargar_datos_json(ruta_archivo_json)
 
 while True:

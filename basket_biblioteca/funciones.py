@@ -799,7 +799,7 @@ def mostrar_el_mejor_jugador_global(lista:list):
     
     for indice in lista_estadisticas:
         # Llama a la función calcular_el_jugador_con_mayor_estadistica
-        # Con dato_returneado y cantidad_returneada no se hace nada
+        # dato_returneado y cantidad_returneada no se utilizan
         dato_returneado, nombre_returneado, cantidad_returneada = calcular_el_jugador_con_mayor_estadistica(lista,indice)
         # Si el nombre no está en el diccionario de nombres, se le asigna un valor inicial
         if nombre_returneado not in dict_nombres:
